@@ -203,7 +203,10 @@ async function run() {
     app.post('/payments', verifyJWT, async(req, res)=>{
       const payment= req.body;
       const result = await paymentCollection.insertOne(payment);
-      res.send(result);
+
+      const query = { _id: { $in: payment.cartItems.map(id=> new ObjectId(id))}}
+      const deleteResult= await cartCollection.deleteOne(query)
+      res.send(result,deleteResult);
     })
     
     //instructor
