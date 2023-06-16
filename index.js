@@ -213,12 +213,26 @@ async function run() {
       res.send({insertResult, deleteResult});
     })
     
+    app.get('/payments',async(req,res)=>{
+      const result= await paymentCollection.find().toArray();
+      res.send(result);
+  })
     //instructor
     app.get('/instructor', async(req,res)=>{
         const result= await instructorCollection.find().toArray();
         res.send(result);
     })
 
+    app.post('/instructor', async (req, res) => {
+      const user = req.body;
+      const query = { email: user.email }
+      const existingUser = await instructorCollection.findOne(query);
+      if (existingUser) {
+        return res.send({ message: 'user already exists' })
+      }
+      const result = await instructorCollection.insertOne(user);
+      res.send(result);
+    })
     //class
     app.get('/class',async(req,res)=>{
         const result= await classCollection.find().toArray();
