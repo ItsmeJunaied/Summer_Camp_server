@@ -270,6 +270,7 @@ async function run() {
       const result = await classCollection.updateOne(filter, updateDoc);
       res.send(result);
     })
+
     //carts
     app.get('/carts', verifyJWT, async (req, res) => {
       const email = req.query.email;
